@@ -2,10 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Listening Practice</title>
+<title>Listening Tests</title>
 <style>
-body{font-family:Arial;padding:20px}
-.question{margin:10px 0}
+body{font-family:Arial;padding:20px;background:#f5f5f5}
+.test{margin:20px 0;padding:15px;background:white;border-radius:10px}
+button{margin:5px;padding:8px 12px}
 .correct{color:green}
 .wrong{color:red}
 </style>
@@ -15,6 +16,11 @@ body{font-family:Arial;padding:20px}
 
 <h1>Listening Practice</h1>
 
+<select id="testSelect" onchange="loadTest()">
+<option value="0">Trộn 15</option>
+<option value="1">Trộn 23</option>
+</select>
+
 <div id="quiz"></div>
 
 <button onclick="check()">Check Answers</button>
@@ -22,50 +28,64 @@ body{font-family:Arial;padding:20px}
 <h2 id="score"></h2>
 
 <script>
-const data = [
-{q:"Long and red",a:"Long and red"},
-{q:"Sick",a:"Sick"},
-{q:"15",a:"15"},
-{q:"Marketplace",a:"Marketplace"},
-{q:"Go to the theatre and play sports",a:"Go to the theatre and play sports"},
-{q:"Quarter to eight",a:"Quarter to eight"},
-{q:"One",a:"One"},
-{q:"2 weeks",a:"2 weeks"},
-{q:"Go to the park",a:"Go to the park"},
-{q:"Play golf",a:"Play golf"}
+
+const tests = [
+[
+"Long and red",
+"Sick",
+"15",
+"Marketplace",
+"Go to the theatre and play sports"
+],
+[
+"The town hall",
+"A university area",
+"Persuading his family",
+"10000",
+"To work in a business"
+]
 ];
 
+let current=0;
+
+function loadTest(){
+current=document.getElementById("testSelect").value;
+render();
+}
+
+function render(){
 let html="";
-
-data.forEach((item,i)=>{
+tests[current].forEach((q,i)=>{
 html+=`
-<div class="question">
-${i+1}. ${item.q}<br>
-<input id="q${i}" placeholder="Your answer">
+<div class="test">
+${i+1}. ${q}<br>
+<input id="q${i}">
 <span id="r${i}"></span>
-</div>
-`;
+</div>`;
 });
-
 document.getElementById("quiz").innerHTML=html;
+}
 
 function check(){
 let score=0;
-data.forEach((item,i)=>{
+tests[current].forEach((a,i)=>{
 let user=document.getElementById("q"+i).value.trim();
-let result=document.getElementById("r"+i);
+let r=document.getElementById("r"+i);
 
-if(user.toLowerCase()==item.a.toLowerCase()){
-result.innerHTML=" ✔";
-result.className="correct";
+if(user.toLowerCase()==a.toLowerCase()){
+r.innerHTML=" ✔";
+r.className="correct";
 score++;
 }else{
-result.innerHTML=" ✘ ("+item.a+")";
-result.className="wrong";
+r.innerHTML=" ✘ ("+a+")";
+r.className="wrong";
 }
 });
-document.getElementById("score").innerText="Score: "+score+"/"+data.length;
+document.getElementById("score").innerText="Score: "+score+"/"+tests[current].length;
 }
+
+render();
+
 </script>
 
 </body>
